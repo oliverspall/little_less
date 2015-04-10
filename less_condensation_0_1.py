@@ -24,7 +24,7 @@
 ##(though deprecating this as it is a bit of a pain)
 ##Version less_condensation_0_1: starting to build the full script. First step includes threading to start to build the //
 ##image parsing to and calling from database, and perhaps the image manipulation, but I'm not sure about that yet.
-##Version less_condensation_0_2: started to write the functions for querying and updating the database. Slowly.
+##
 
 ##Dependencies:
 import cv2
@@ -42,7 +42,7 @@ import settings_DB
 #	cascPath = os.path.join("home/imiant/opencv/OpenCV/opencv-2.4.9/data/haarcascades", "haarcascade_frontalface_default.xml")
 cascPath = sys.argv[1]
 print cascPath
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 ramp_frames = 30
 faceCascade = cv2.CascadeClassifier(cascPath)
 if os.path.exists("/home/imiant/Documents/little_less/crops/") == False:
@@ -64,7 +64,7 @@ else:
 
 def startthreads():
 	threading.Thread(target=face_rec).start()
-	#threading.Thread(target=check_new_faces).start()
+	threading.Thread(target=check_new_faces).start()
 
 def face_rec():
 	while(True):
@@ -110,17 +110,19 @@ def face_rec():
 
 				#at this point we will now need to create a crop of the image, and start to think about how it gets put in the DB
 				#the below was an initial test to see whether I could simply take the coordinates from above and crop.
-				#doesn't work yet. #pdate - got it working now.
+				#doesn't work yet.
 
+						#final_img = image[cv2.rectangle(image, (x,y), (x+w, y+h), (0, 255, 0), 2)]
+						#cv2.imshow("Cropped_image", final_image)
+						#cv2.imwrite("crop_"+timestamp+".jpg",final_img)
 				crop = image[y:y+h, x:x+w]
 				print (x, w, y, h)
 				unique_id = timestamp
 				cv2.imwrite(os.path.join("crop"+unique_id+".jpg",crop))
-				image_loc = (os.path.join("crop"+unique_id+".jpg"))
+				image_loc = (os.path.join("crop"+unique_id+".jpg")
 				#cv.Copy(image, crop, mask=None)
 				cv2.imshow("cropped", crop)
 				cv2.waitKey(25)
-				#below for database stuff:
 				filename = ("crop"+unique_id)
 				print filename
 				status = settings_DB.NEW
@@ -140,27 +142,18 @@ def face_rec():
 	cap.release()
 	cv2.destroyAllWindows()
 
-# def check_new_faces(faces):
-# 	#identify whether there are new images
+def check_new_faces(faces):
+	#identify whether there are new images
 
 
-# def compare_new_faces():
-# 	#make a list of new faces recognized
-# 	new_images = [settings_DB.settings.get_new_images(self,image_id,status)]
-# 	for image in new_images:
-# 		#run the elvis action on the images
-# 		#update the elvis table with matching images
-# 		#update with match %
-# 		#update with the elvis ID
-# 		#update shown_status
-# 		#update the image table status
+def compare_new_faces():
+	#compares the faces with the database of elvises
+	#adds data to the elvis database where needed
+
+def analyse_manipulate_image():
+	#this should ideally do the analysis & parse image information based on % probability
 
 
-
-# def analyse_manipulate_image():
-# 	#this should ideally do the analysis & parse image information based on % probability
-
-# def web stuff()
 if __name__ == '__main__':
 	while True:
 		startthreads()
