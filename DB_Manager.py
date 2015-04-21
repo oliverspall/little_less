@@ -33,7 +33,7 @@
 #........................................................................
 
 import sqlite3
-import settings_DB
+import settings
 
 class DatabaseFunctions():
 
@@ -42,9 +42,8 @@ class DatabaseFunctions():
         try:
             self.dbfile = dbfile
             self.db = sqlite3.connect(self.dbfile)
-            self.cursor = db.cursor()
             print self.db
-            self.msg += '\nStarted DB'    
+            self.msg += '\nStarted DB' 
         except Exception as e:
             self.msg += '\nERROR: '+str(e)   
 
@@ -71,7 +70,7 @@ class DatabaseFunctions():
                 status,
                 ):
         db = sqlite.connect()
-        cursor = self.db.cursor()
+        cursor = self.db.cursor(dbfile)
         cursor.execute("SELECT face_id, image_loc, status FROM Found_faces WHERE status = NEW")
         rows = cursor.fetchall()
         for row in rows:

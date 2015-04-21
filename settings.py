@@ -33,7 +33,7 @@
 #........................................................................
   
 
-from DatabaseBuilder import DatabaseBuilder
+from databasebuilder import DatabaseBuilder
 import sqlite3
 #
 #Here are status settings for the images that we capture so we know which ones are new, which ones have been analysed and //

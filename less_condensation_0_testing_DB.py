@@ -35,8 +35,8 @@ import time
 import sys
 import os
 import threading
-import settings_DB
-from DatabaseBuilder import DatabaseBuilder
+import settings
+from databasebuilder import DatabaseBuilder
 import sqlite3
 import DB_Manager
 
@@ -61,8 +61,8 @@ else:
 	dirname = 'crops'
 
 ##here's some database setup stuff:
-DBD = DB_Manager.DatabaseFunctions(settings_DB.databasename)
-databasefile = settings_DB.databasename
+DBD = DB_Manager.DatabaseFunctions(settings.databasename, settings.DB)
+databasefile = settings.databasename
 db = sqlite3.connect(databasefile)
 cursor = db.cursor()
   
@@ -119,8 +119,8 @@ def face_rec():
 		##while rolling:
 		timestamp = str(datetime.datetime.now())
 		#rolling, image = cap.read()
-		image = cv2.imread("/Users/oliverspall/little_less/crops/testing_image.jpg",0)
-		cv2.imshow("/Users/oliverspall/little_less/crops/testing_image.jpg",0)
+		image = cv2.imread("/Users/oliverspall/Downloads/Elvis16.jpg",0)
+		cv2.imshow("/Users/oliverspall/Downloads/Elvis16.jpg",0)
 		# gray = image
 		# #cv2.imshow(image, gray)
 		# # Detect faces in the image using the OpenCV XML facial recognition cascade.
@@ -147,7 +147,7 @@ def face_rec():
 		filename = str("Elvis_"+timestamp)
 		print file_path
 		print filename
-		status = settings_DB.NEW
+		status = settings.NEW
 		print status
 		#face_id, image_loc, timestamp, filename, status) VALUES(?,?,?,?)', values
 		DBD.insert_value(timestamp, file_path, timestamp, filename, status)
